@@ -1,0 +1,132 @@
+<html>
+	<head>
+		<script src="../../js/three.js"></script>
+		<script src="../../js/DDSLoader.js"></script>
+		<script src="../../js/MTLLoader.js"></script>
+		<script src="../../js/OBJMTLLoader.js"></script>
+
+		<title> Multimedia Interactiva - GAVIOTA </title>
+		<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+		<link media= "screen" rel="stylesheet" href="../../style.css" type="text/css">
+
+	</head>
+
+	<body class="mar">
+
+		<div class="information">
+			<h1 class="titulo"> Ballena Azul <span class="arrow"></span></h1>
+			El <b>rorcual azul</b> <em>(nombre cient&iacute;fico Balaenoptera musculus)</em>, m&aacute;s conocido como <b>Ballena azul</b>, es una especie de cet&aacute;ceo misticeto de la familia <b>Balaenopteridae</b>. <br><br>
+			Mide entre 24 y 27 m de longitud y pesa entre 100 y 120 t, aunque hay registros de ejemplares de m&aacute;s de 30 m de longitud y m&aacute;s de 190 t de peso, que lo convierten en el mayor animal de la Tierra, no solo en la actualidad sino tambi&eacute;n el mayor del que se tenga noticia en la Historia. <br><br>
+			 Largo y estilizado, el cuerpo de este mam&iacute;fero marino es de color gris azulado a lo largo del dorso y algo m&aacute;s claro en la zona ventral. Existen al menos tres subespecies distintas: B. m. musculus, del Atl&aacute;ntico Norte y Pac&iacute;fico Norte; B. m. intermedia, del oc&eacute;ano Ant&aacute;rtico y la B. m. brevicauda <em>(tambi&eacute;n conocida como ballena azul pigmea)</em>, que se encuentra en el <b>&Iacute;ndico</b> y en el <b>Pac&iacute;fico Sur</b>. Existen dudas sobre la atribuci&oacute;n como una cuarta subespecie de la B. m. indica, que tambi&eacute;n se encuentra en el oc&eacute;ano &Iacute;ndico. Como otras ballenas barbadas, su dieta consiste principalmente en peque&ntilde;os crust&aacute;ceos conocidos como <b>krill</b>.
+
+			 <div class="selection">
+				<button id="b1" type="button" onclick="location.href= '../../02.html';">Regresar</button>
+				<button id="b2" type="button" onclick="location.href= '../../index.html';">Inicio</button>
+			</div>
+
+		</div>
+		
+		<script>
+			//------------------------------------------------------------------------DECLARACIONES
+			var camara, escena, rndr, modelo, raycaster;
+			var mouse = new THREE.Vector2(), INTERSECTED;
+
+			init();
+			Draw();
+
+			//------------------------------------------------------------------------------------------------------INIT
+			function init(){
+				escena = new THREE.Scene();
+				camara = new THREE.PerspectiveCamera(70, window.innerWidth*0.66/window.innerHeight, 1, 10000);
+				camara.position.z= 50;
+
+				raycaster = new THREE.Raycaster();
+
+				rndr= new THREE.WebGLRenderer( { alpha: true } );
+				rndr.setSize(window.innerWidth*0.66, window.innerHeight*0.97);
+				rndr.setClearColor(0x000000, 0);
+				document.body.appendChild(rndr.domElement);
+				
+			//-----------------------------------------------------------------------Luces
+				var ambiental = new THREE.AmbientLight( 0xFFFFFF );
+				escena.add( ambiental );
+
+				var direccional1 = new THREE.DirectionalLight( 0xFFFFFF );
+					direccional1.position.set( 0, 0, 1 ).normalize();
+					escena.add( direccional1 );
+				var direccional2 = new THREE.DirectionalLight( 0xFFFFFF );
+						direccional2.position.set( 0.5, 0, -1 ).normalize();
+						escena.add( direccional2 );
+				var direccional3 = new THREE.DirectionalLight( 0xFFFFFF );
+						direccional3.position.set( -0.5, 0, -1 ).normalize();
+						escena.add( direccional3 );
+			//-----------------------------------------------------------------------OBJ
+				modelo= new THREE.Object3D();
+
+				THREE.Loader.Handlers.add( /\.dds$/i, new THREE.DDSLoader() );				
+				var loader = new THREE.OBJMTLLoader();
+				loader.load( '../../obj/maritimos/ballena.obj', '../../obj/maritimos/ballena.mtl', function ( object ) { 
+
+						 //object.position.y = 0;
+						 //object.position.x = -20; 
+						 object.scale.set(0.5,0.5,0.5);
+
+						 escena.add( object );
+						 modelo=object;
+
+						});	
+				camara.position=modelo.position;
+
+				document.addEventListener( 'mousemove', onDocumentMouseMove, false );//posición del mouse
+				window.addEventListener( 'resize', onWindowResize, false );//tamaño del canvas			
+			} //----------------------------------------------------------------------------------------------------FIN INIT
+
+			function Update(){
+
+					modelo.rotation.y += 0.01;
+
+					//--------------------
+					//camara.position.y = mouse.y * 10;
+					//---------------
+
+					if (mouse.x<0.4)
+					{
+						camara.position.y = mouse.y * 100;
+					}
+
+
+					camara.lookAt( modelo.position);
+					camara.position.x = 10;
+					//rndr.render( escena, camara );
+					console.log(mouse.x);
+			}
+
+			//-------------------------------------------------------------------------------------------------------Draw
+			function Draw(){
+				requestAnimationFrame(Draw);
+					Update();
+				rndr.render(escena,camara);
+			}
+
+			function onDocumentMouseMove( event ) {
+
+					event.preventDefault();
+
+					mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+					//console.log(mouse.x);
+					mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+
+			}
+			function onWindowResize() {
+
+					camara.aspect = window.innerWidth / window.innerHeight;
+					camara.updateProjectionMatrix();
+
+					rndr.setSize( window.innerWidth, window.innerHeight );
+
+				}
+
+		</script>
+	</body>
+
+</html>

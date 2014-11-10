@@ -1,0 +1,134 @@
+<html>
+	<head>
+		<script src="../../js/three.js"></script>
+		<script src="../../js/DDSLoader.js"></script>
+		<script src="../../js/MTLLoader.js"></script>
+		<script src="../../js/OBJMTLLoader.js"></script>
+
+		<title> Multimedia Interactiva - GAVIOTA </title>
+		<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+		<link media= "screen" rel="stylesheet" href="../../style.css" type="text/css">
+
+	</head>
+
+	<body class="insc">
+
+		<div class="information">
+			<h1 class="titulo"> Mosca <span class="arrow"></span></h1>
+			Las moscas t&iacute;picas <em>(Muscidae y familias pr&oacute;ximas)</em>, como todos los d&iacute;pteros, poseen un cuerpo dividido en tres regiones o tagmas: cabeza, t&oacute;rax y abdomen. Poseen ojos compuestos por miles de facetas sensibles a la luz individualmente que limpian constantemente frotando sus patas, y piezas bucales adaptadas para succionar, lamer o perforar; ninguna mosca es capaz de morder o masticar, pero muchas especies pican y succionan sangre. Solo tienen dos alas; las alas posteriores están reducidas a unas estructuras llamadas halterios o balancines, que act&uacute;an como &oacute;rganos estabilizadores del desplazamiento.<br><br>
+
+			Tienen el cuerpo cubierto por numerosas sedas sensoriales con las que pueden saborear, oler y sentir. Las sedas de las piezas bucales y de las patas se usan para saborear; las moscas saborean lo que pisan; si pisan algo sabroso, bajan la boca y lo vuelven a probar.<br><br>
+
+			Las patas poseen unas almohadillas adherentes que les permiten caminar sobre superficies lisas como el vidrio, incluso boca abajo.
+
+			 <div class="selection">
+				<button id="b1" type="button" onclick="location.href= '../../03.html';">Regresar</button>
+				<button id="b2" type="button" onclick="location.href= '../../index.html';"> Inicio</button>
+			</div>
+
+		</div>
+		
+		<script>
+			//------------------------------------------------------------------------DECLARACIONES
+			var camara, escena, rndr, modelo, raycaster;
+			var mouse = new THREE.Vector2(), INTERSECTED;
+
+			init();
+			Draw();
+
+			//------------------------------------------------------------------------------------------------------INIT
+			function init(){
+				escena = new THREE.Scene();
+				camara = new THREE.PerspectiveCamera(70, window.innerWidth*0.66/window.innerHeight, 1, 10000);
+				camara.position.z= 10;
+
+				raycaster = new THREE.Raycaster();
+
+				rndr= new THREE.WebGLRenderer( { alpha: true } );
+				rndr.setSize(window.innerWidth*0.66, window.innerHeight*0.97);
+				rndr.setClearColor(0x000000, 0);
+				document.body.appendChild(rndr.domElement);
+				
+			//-----------------------------------------------------------------------Luces
+				var ambiental = new THREE.AmbientLight( 0xFFFFFF );
+				escena.add( ambiental );
+
+				var direccional1 = new THREE.DirectionalLight( 0xFFFFFF );
+					direccional1.position.set( 0, 0, 1 ).normalize();
+					escena.add( direccional1 );
+				var direccional2 = new THREE.DirectionalLight( 0xFFFFFF );
+						direccional2.position.set( 0.5, 0, -1 ).normalize();
+						escena.add( direccional2 );
+				var direccional3 = new THREE.DirectionalLight( 0xFFFFFF );
+						direccional3.position.set( -0.5, 0, -1 ).normalize();
+						escena.add( direccional3 );
+			//-----------------------------------------------------------------------OBJ
+				modelo= new THREE.Object3D();
+
+				THREE.Loader.Handlers.add( /\.dds$/i, new THREE.DDSLoader() );				
+				var loader = new THREE.OBJMTLLoader();
+				loader.load( '../../obj/insectos/mosca.obj', '../../obj/insectos/mosca.mtl', function ( object ) { 
+
+						 object.position.y = 0;
+						 object.position.x = -20; 
+						 object.scale.set(1,1,1);
+
+						 escena.add( object );
+						 modelo=object;
+
+						});	
+				camara.position=modelo.position;
+
+				document.addEventListener( 'mousemove', onDocumentMouseMove, false );//posición del mouse
+				window.addEventListener( 'resize', onWindowResize, false );//tamaño del canvas			
+			} //----------------------------------------------------------------------------------------------------FIN INIT
+
+			function Update(){
+
+					modelo.rotation.y += 0.01;
+
+					//--------------------
+					//camara.position.y = mouse.y * 10;
+					//---------------
+
+					if (mouse.x<0.4)
+					{
+						camara.position.y = mouse.y * 100;
+					}
+
+
+					camara.lookAt( modelo.position);
+					camara.position.x = 10;
+					//rndr.render( escena, camara );
+					console.log(mouse.x);
+			}
+
+			//-------------------------------------------------------------------------------------------------------Draw
+			function Draw(){
+				requestAnimationFrame(Draw);
+					Update();
+				rndr.render(escena,camara);
+			}
+
+			function onDocumentMouseMove( event ) {
+
+					event.preventDefault();
+
+					mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+					//console.log(mouse.x);
+					mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+
+			}
+			function onWindowResize() {
+
+					camara.aspect = window.innerWidth / window.innerHeight;
+					camara.updateProjectionMatrix();
+
+					rndr.setSize( window.innerWidth, window.innerHeight );
+
+				}
+
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,132 @@
+<html>
+	<head>
+		<script src="../../js/three.js"></script>
+		<script src="../../js/DDSLoader.js"></script>
+		<script src="../../js/MTLLoader.js"></script>
+		<script src="../../js/OBJMTLLoader.js"></script>
+
+		<title> Multimedia Interactiva - GAVIOTA </title>
+		<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+		<link media= "screen" rel="stylesheet" href="../../style.css" type="text/css">
+
+	</head>
+
+	<body class="insc">
+
+		<div class="information">
+			<h1 class="titulo"> Catarina <span class="arrow"></span></h1>
+			Tienen el cuerpo redondeado y con frecuencia colores vivos. Muchas especies se alimentan de pulgones, por lo que contribuyen a controlar estas plagas.<br><br>
+			Son insectos peque&ntilde;os, con un tama&ntilde;o reducido que va de 5 a 8 milimetros. De forma redondeada u oval, brillantes, suelen ser de vivos colores, con manchas negras sobre un fondo naranja, amarillo o rojo, en forma de puntos o rayas <em>(no es un caparaz&oacute;n sino gruesas alas transformadas, llamadas &eacute;litros, que protegen las alas funcionales para el vuelo, el segundo par)</em>. Algunas especies son peludas. Su cabeza, antenas y patas son negros. Las extremidades cortas. Dado que son &uacute;tiles, coloridos e inofensivos para los humanos, son insectos vistos tradicionalmente con simpat&iacute;a e incluso se les considera en algunos lugares signo de buena suerte, y que el matarlas se toma como un presagio de mala suerte.<br><br>
+			Los vivos colores de las Catarinas sirven para mantener alejados a los predadores, que suelen asociar los colores brillantes.
+
+			 <div class="selection">
+				<button id="b1" type="button" onclick="location.href= '../../03.html';">Regresar</button>
+				<button id="b2" type="button" onclick="location.href= '../../index.html';"> Inicio</button>
+			</div>
+
+		</div>
+		
+		<script>
+			//------------------------------------------------------------------------DECLARACIONES
+			var camara, escena, rndr, modelo, raycaster;
+			var mouse = new THREE.Vector2(), INTERSECTED;
+
+			init();
+			Draw();
+
+			//------------------------------------------------------------------------------------------------------INIT
+			function init(){
+				escena = new THREE.Scene();
+				camara = new THREE.PerspectiveCamera(70, window.innerWidth*0.66/window.innerHeight, 1, 10000);
+				camara.position.z= 10;
+
+				raycaster = new THREE.Raycaster();
+
+				rndr= new THREE.WebGLRenderer( { alpha: true } );
+				rndr.setSize(window.innerWidth*0.66, window.innerHeight*0.97);
+				rndr.setClearColor(0x000000, 0);
+				document.body.appendChild(rndr.domElement);
+				
+			//-----------------------------------------------------------------------Luces
+				var ambiental = new THREE.AmbientLight( 0xFFFFFF );
+				escena.add( ambiental );
+
+				var direccional1 = new THREE.DirectionalLight( 0xFFFFFF );
+					direccional1.position.set( 0, 0, 1 ).normalize();
+					escena.add( direccional1 );
+				var direccional2 = new THREE.DirectionalLight( 0xFFFFFF );
+						direccional2.position.set( 0.5, 0, -1 ).normalize();
+						escena.add( direccional2 );
+				var direccional3 = new THREE.DirectionalLight( 0xFFFFFF );
+						direccional3.position.set( -0.5, 0, -1 ).normalize();
+						escena.add( direccional3 );
+			//-----------------------------------------------------------------------OBJ
+				modelo= new THREE.Object3D();
+
+				THREE.Loader.Handlers.add( /\.dds$/i, new THREE.DDSLoader() );				
+				var loader = new THREE.OBJMTLLoader();
+				loader.load( '../../obj/insectos/catarina.obj', '../../obj/insectos/catarina.mtl', function ( object ) { 
+
+						 object.position.y = 0;
+						 object.position.x = -20; 
+						 object.scale.set(1,1,1);
+
+						 escena.add( object );
+						 modelo=object;
+
+						});	
+				camara.position=modelo.position;
+
+				document.addEventListener( 'mousemove', onDocumentMouseMove, false );//posición del mouse
+				window.addEventListener( 'resize', onWindowResize, false );//tamaño del canvas			
+			} //----------------------------------------------------------------------------------------------------FIN INIT
+
+			function Update(){
+
+					modelo.rotation.y += 0.01;
+
+					//--------------------
+					//camara.position.y = mouse.y * 10;
+					//---------------
+
+					if (mouse.x<0.4)
+					{
+						camara.position.y = mouse.y * 100;
+					}
+
+
+					camara.lookAt( modelo.position);
+					camara.position.x = 10;
+					//rndr.render( escena, camara );
+					console.log(mouse.x);
+			}
+
+			//-------------------------------------------------------------------------------------------------------Draw
+			function Draw(){
+				requestAnimationFrame(Draw);
+					Update();
+				rndr.render(escena,camara);
+			}
+
+			function onDocumentMouseMove( event ) {
+
+					event.preventDefault();
+
+					mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+					//console.log(mouse.x);
+					mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+
+			}
+			function onWindowResize() {
+
+					camara.aspect = window.innerWidth / window.innerHeight;
+					camara.updateProjectionMatrix();
+
+					rndr.setSize( window.innerWidth, window.innerHeight );
+
+				}
+
+		</script>
+	</body>
+
+</html>

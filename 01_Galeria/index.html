@@ -1,0 +1,200 @@
+<html>
+	<head>
+		<script src="js/three.min.js"></script>
+        <script src="js/stats.min.js"></script>
+		<title> Multimedia Interactiva - Proyecto Final - 1514318 </title>
+		<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+
+			
+
+			<style>
+			canvas	{
+						position: absolute;
+						top: 10px;
+						width: 100%;
+						text-align: center;						
+					}
+
+			body 	{
+						background-image: url("fondos/inicio.jpg");
+						background-size: 100% 100%;
+    					background-repeat: no-repeat;
+					}
+			.bienvenido{
+						position: absolute;
+						z-index: 90;
+						left: 32%;
+						top:0px;
+					}
+			</style>
+
+	</head>
+
+	<body>
+	<IMG class="bienvenido" SRC="textures/cubes/bienvenido.png">		
+		<script>
+			var camara, escena, rndr;
+			var cubo1, cubo2, cubo3;
+			var mouse = new THREE.Vector2(), INTERSECTED;
+			var radius = 30, theta = 0;
+			var vector, intersects;
+
+			init();
+			Draw();
+
+			function init(){
+
+			//-----------------------------------------------------------------------Elements
+				escena = new THREE.Scene();
+				camara = new THREE.PerspectiveCamera(70, window.innerWidth/window.innerHeight, 1, 10000);
+				camara.position.z= 30;
+
+				raycaster = new THREE.Raycaster();
+
+				rndr= new THREE.WebGLRenderer( { alpha: true } );
+				rndr.setSize(window.innerWidth*0.99, window.innerHeight*0.97);
+				rndr.setClearColor(0x000000, 0);
+				document.body.appendChild(rndr.domElement);
+				
+			//-----------------------------------------------------------------------Lights
+				var ambiental = new THREE.AmbientLight( 0xFFFFFF );
+				escena.add( ambiental );
+			//------------------------------------------------------------------------Cubos
+				var geometry = new THREE.BoxGeometry( 10, 10, 10 );
+
+				var material1 = new THREE.MeshLambertMaterial( { color: 0xFFFFFF, shading: THREE.FlatShading, map: THREE.ImageUtils.loadTexture( "textures/cubes/01.png" ) } );
+				var material2 = new THREE.MeshLambertMaterial( { color: 0xFFFFFF, shading: THREE.FlatShading, map: THREE.ImageUtils.loadTexture( "textures/cubes/02.png" ) } );
+				var material3 = new THREE.MeshLambertMaterial( { color: 0xFFFFFF, shading: THREE.FlatShading, map: THREE.ImageUtils.loadTexture( "textures/cubes/03.png" ) } );
+
+
+				cubo1 = new THREE.Mesh( geometry, material1 );
+				cubo1.position.x= -20;
+				cubo1.position.y= 0;
+				escena.add(cubo1);
+
+				cubo2 = new THREE.Mesh( geometry, material2 );
+				cubo2.position.x=  0;
+				cubo2.position.y= -10;
+				escena.add(cubo2);
+
+				cubo3 = new THREE.Mesh( geometry, material3 );
+				cubo3.position.x= 20;
+				cubo3.position.y= 0;
+				escena.add(cubo3);
+
+
+				//---
+				
+				document.addEventListener( 'mousemove', onDocumentMouseMove, false );//posición del mouse
+				window.addEventListener( 'resize', onWindowResize, false );//tamaño del canvas
+
+			}//........................................................Init-fin
+
+			//--------------------------------------------------------------------------------------------------Update
+			function Update(){
+				document.onmousedown = clic;
+				cubo1.rotation.x = cubo1.rotation.y = cubo1.rotation.z+=0.01;
+				cubo2.rotation.x = cubo2.rotation.y = cubo2.rotation.z-=0.01;
+				cubo3.rotation.x = cubo3.rotation.y = cubo3.rotation.z+=0.01;
+
+				//--------
+
+				theta += 0.1;
+				camara.position.y = radius * Math.sin( THREE.Math.degToRad( theta ) );
+				camara.lookAt( escena.position );
+
+				//----- intersecciones
+
+					vector = new THREE.Vector3( mouse.x, mouse.y, 1 ).unproject( camara );
+					raycaster.set( camara.position, vector.sub( camara.position ).normalize() );
+					intersects = raycaster.intersectObjects( escena.children );
+
+					if ( intersects.length > 0 ) {
+
+						if ( INTERSECTED != intersects[ 0 ].object ) {
+
+							if ( INTERSECTED ) INTERSECTED.material.emissive.setHex( INTERSECTED.currentHex );
+
+							INTERSECTED = intersects[ 0 ].object;
+							INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();
+							INTERSECTED.material.emissive.setHex( 0xff0000 );
+							
+
+						}
+
+					} else {
+
+						if ( INTERSECTED ) INTERSECTED.material.emissive.setHex( INTERSECTED.currentHex );
+
+						INTERSECTED = null;
+
+					}
+
+					rndr.render( escena, camara );
+			}
+
+			//--------------------------------------------------------------------------------------------------Draw
+			function Draw(){
+				requestAnimationFrame(Draw);
+					Update();
+				rndr.render(escena,camara);
+			}
+
+			function onDocumentMouseMove( event ) {
+
+					event.preventDefault();
+
+					mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+					//console.log(mouse.x);
+					mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+
+			}
+			function onWindowResize() {
+
+					camara.aspect = window.innerWidth / window.innerHeight;
+					camara.updateProjectionMatrix();
+
+					rndr.setSize( window.innerWidth, window.innerHeight );
+
+				}
+			function clic(e) 
+			{	
+
+	  			 if (e.button == 0)
+	  			 {
+	  			 	right=true;
+	  			 	if(intersects[0].object.uuid == cubo1.uuid)
+	  			 	{
+	  			 		console.log("Spain");
+	  			 		location.href= "02.html";
+	  			 	}
+	  			 	if(intersects[0].object.uuid == cubo2.uuid)
+	  			 	{
+	  			 		console.log("AppleJack");
+	  			 		location.href= "01.html";
+	  			 	}
+	  			 	if(intersects[0].object.uuid == cubo3.uuid)
+	  			 	{
+	  			 		console.log("England");
+	  			 		location.href= "03.html";
+	  			 	}
+
+	  			 } 
+
+	   			 else if (e.button == 1)
+	   			 {
+	   			 	//scroll=true;
+	   			 }
+
+	   			 else if (e.button == 2)
+	   			 {
+	   			  	//left=true;
+	   			 }
+	 			
+			}		
+			
+		</script>
+
+	</body>
+
+</html>
