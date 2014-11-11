@@ -4,6 +4,7 @@
         <script src="js/stats.min.js"></script>
 		<title> Multimedia Interactiva - Proyecto Final - 1514318 </title>
 		<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+		<link media= "screen" rel="stylesheet" href="style.css" type="text/css">
 
 			
 
@@ -20,11 +21,34 @@
 						background-size: 100% 100%;
     					background-repeat: no-repeat;
 					}
+			.bienvenido{
+						position: absolute;
+						z-index: 90;
+						left: 35%;
+						top:0px;
+					}
+			#b2{
+						position: absolute;
+						z-index: 100;
+						left: 10px;
+						bottom: 10px;
+					}
 			</style>
 
 	</head>
 
-	<body>		
+	<body>
+	<IMG class="bienvenido" SRC="textures/cubes/insectos.png">
+	<audio autoplay loop>
+	  <source src="sonido/nature.mp3" type="audio/ogg">
+	  Your browser does not support the audio tag.
+	</audio>
+
+	<audio id="sobre">
+	  <source src="sonido/button-3.mp3" type="audio/ogg">
+	  Your browser does not support the audio tag.
+	</audio>
+	<button id="b2" type="button" onclick="location.href= 'index.html';"> Inicio</button>
 	<script>
 		var camara, escena, rndr;
 		var cubo1, cubo2, cubo3;
@@ -32,6 +56,10 @@
 		var radius = 30, theta = 0;
 		var vector, intersects;
 		var timer=0;
+		var play = false;
+
+			var sobre = document.getElementById("sobre");
+			sobre.volume = 0.1;
 
 		init();
 		Draw();
@@ -114,6 +142,7 @@
 						INTERSECTED = intersects[ 0 ].object;
 						INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();
 						INTERSECTED.material.emissive.setHex( 0xff0000 );
+						if(play==true){sobre.play();}
 						
 
 					}
@@ -123,6 +152,7 @@
 					if ( INTERSECTED ) INTERSECTED.material.emissive.setHex( INTERSECTED.currentHex );
 
 					INTERSECTED = null;
+					play=true;
 
 				}
 

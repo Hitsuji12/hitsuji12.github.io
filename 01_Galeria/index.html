@@ -26,11 +26,27 @@
 						left: 32%;
 						top:0px;
 					}
+			.musica{
+						z-index: 0;
+						color: white;
+						position: absolute;
+					}
 			</style>
 
 	</head>
 
 	<body>
+	<div class="musica">music by <a href="http://sonicsneakers.newgrounds.com/">sonicsneakers</a> </div>
+	<audio id="audio" autoplay loop>
+	  <source src="sonido/inicio.mp3" type="audio/ogg">
+	  Your browser does not support the audio tag.
+	</audio>
+
+	<audio id="sobre">
+	  <source src="sonido/button-3.mp3" type="audio/ogg">
+	  Your browser does not support the audio tag.
+	</audio>
+
 	<IMG class="bienvenido" SRC="textures/cubes/bienvenido.png">		
 		<script>
 			var camara, escena, rndr;
@@ -38,6 +54,12 @@
 			var mouse = new THREE.Vector2(), INTERSECTED;
 			var radius = 30, theta = 0;
 			var vector, intersects;
+			var play = false;
+
+			var audio = document.getElementById("audio");
+			var sobre = document.getElementById("sobre");
+			audio.volume = 0.2;
+			sobre.volume = 0.1;
 
 			init();
 			Draw();
@@ -119,7 +141,7 @@
 							INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();
 							INTERSECTED.material.emissive.setHex( 0xff0000 );
 							
-
+							if(play==true){sobre.play();}
 						}
 
 					} else {
@@ -127,6 +149,7 @@
 						if ( INTERSECTED ) INTERSECTED.material.emissive.setHex( INTERSECTED.currentHex );
 
 						INTERSECTED = null;
+						play=true;
 
 					}
 
@@ -167,6 +190,8 @@
 	  			 	{
 	  			 		console.log("Spain");
 	  			 		location.href= "02.html";
+
+
 	  			 	}
 	  			 	if(intersects[0].object.uuid == cubo2.uuid)
 	  			 	{

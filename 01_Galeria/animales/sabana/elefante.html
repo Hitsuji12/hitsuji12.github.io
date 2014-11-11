@@ -1,0 +1,139 @@
+<html>
+	<head>
+		<script src="../../js/three.js"></script>
+		<script src="../../js/DDSLoader.js"></script>
+		<script src="../../js/MTLLoader.js"></script>
+		<script src="../../js/OBJMTLLoader.js"></script>
+
+		<title> Multimedia Interactiva - GAVIOTA </title>
+		<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+		<link media= "screen" rel="stylesheet" href="../../style.css" type="text/css">
+
+	</head>
+
+	<body class="sbna">
+	<audio id="audio" autoplay loop>
+	  <source src="../../sonido/inicio.mp3" type="audio/ogg">
+	  Your browser does not support the audio tag.
+	</audio>
+		<div class="information">
+			<h1 class="titulo"> Elefante <span class="arrow"></span></h1>
+			Los elefantes o elef&aacute;ntidos <em>(Elephantidae)</em> son una familia de mam&iacute;feros placentarios del orden Proboscidea. Antiguamente se clasificaban, junto con otros animales de piel gruesa, en el orden, ahora inv&aacute;lido, de los paquidermos <em>(Pachydermata)</em>. Existen hoy en d&iacute;a tres especies y diversas subespecies. Entre los g&eacute;neros extintos de esta familia destacan los mamuts. <br><br>
+			Los elefantes son los animales terrestres m&aacute;s grandes que existen actualmente. El periodo de gestaci&oacute;n es de 22 meses, el m&aacute;s largo en cualquier animal terrestre. El peso al nacer usualmente es 120 kg. Normalmente viven de 50 a 70 a&ntilde;os, pero registros antiguos documentan edades m&aacute;ximas de 82 años.2 El elefante m&aacute;s grande que se ha cazado, de los que se tiene registro, pesó alrededor de 11.000 kg <em>(Angola, 1956)</em>, alcanzando una altura en la cruz de 3,96 m, un metro m&aacute;s alto que el elefante africano promedio. El elefante m&aacute;s peque&ntilde;o, de alrededor del tama&ntilde;o de una cr&iacute;a o un cerdo grande, es una especie prehist&oacute;rica que existi&oacute; en la isla de Creta, Elephas creticus, durante el <b>Pleistoceno</b>.
+
+			 <div class="selection">
+				<button id="b1" type="button" onclick="location.href= '../../01.html';">Regresar</button>
+				<button id="b2" type="button" onclick="location.href= '../../index.html';"> Inicio</button>
+			</div>
+
+		</div>
+		<script>
+			//------------------------------------------------------------------------DECLARACIONES
+			var camara, escena, rndr, modelo, raycaster,movx=0;
+			var mouse = new THREE.Vector2(), INTERSECTED;
+			var camradrot = 10;
+
+			var audio = document.getElementById("audio");
+			audio.volume = 0.2;
+
+			init();
+			Draw();
+
+			//------------------------------------------------------------------------------------------------------INIT
+			function init(){
+				escena = new THREE.Scene();
+				camara = new THREE.PerspectiveCamera(70, window.innerWidth*0.66/window.innerHeight, 1, 10000);
+				camara.position.z= 50;
+
+				raycaster = new THREE.Raycaster();
+
+				rndr= new THREE.WebGLRenderer( { alpha: true } );
+				rndr.setSize(window.innerWidth*0.66, window.innerHeight*0.97);
+				rndr.setClearColor(0x000000, 0);
+				document.body.appendChild(rndr.domElement);
+				
+			//-----------------------------------------------------------------------Luces
+				var direccional1 = new THREE.DirectionalLight( 0xFFFFFF , 3);
+					direccional1.position.set( 0, 0, 1 ).normalize();
+					escena.add( direccional1 );
+				var direccional2 = new THREE.DirectionalLight( 0xFFFFFF , 3);
+						direccional2.position.set( 0.5, 0, -1 ).normalize();
+						escena.add( direccional2 );
+				var direccional3 = new THREE.DirectionalLight( 0xFFFFFF , 3);
+						direccional3.position.set( -0.5, 0, -1 ).normalize();
+						escena.add( direccional3 );
+			//-----------------------------------------------------------------------OBJ
+				modelo= new THREE.Object3D();
+
+				THREE.Loader.Handlers.add( /\.dds$/i, new THREE.DDSLoader() );				
+				var loader = new THREE.OBJMTLLoader();
+				loader.load( '../../obj/terrestres/elefante.obj', '../../obj/terrestres/elefante.mtl', function ( object ) { 
+
+						 object.position.y = -3;
+						 object.position.x = 0; 
+						 object.scale.set(0.5,0.5,0.5);
+
+						 escena.add( object );
+						 modelo=object;
+
+						});	
+				//camara.position.x= 10;
+
+				document.addEventListener( 'mousemove', onDocumentMouseMove, false );//posición del mouse
+				document.addEventListener("mousewheel", MouseWheelHandler, false);
+				window.addEventListener( 'resize', onWindowResize, false );//tamaño del canvas			
+			} //----------------------------------------------------------------------------------------------------FIN INIT
+
+			function Update(){
+					
+					camara.position.x =  camradrot;
+					camara.position.z =  camradrot;					
+
+					modelo.rotation.y +=0.01;
+
+					if (mouse.x<0.4)
+					{
+						camara.position.y = (mouse.y* 100);						
+					}
+
+					camara.lookAt( modelo.position);
+					console.log(mouse.x);
+			}
+
+			//-------------------------------------------------------------------------------------------------------Draw
+			function Draw(){
+				requestAnimationFrame(Draw);
+					Update();
+				rndr.render(escena,camara);
+			}
+
+			function onDocumentMouseMove( event ) {
+
+					event.preventDefault();
+
+					mouse.x = (( event.clientX / window.innerWidth ) * 2 - 1);
+					//console.log(mouse.x);
+					mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+
+			}
+			function onWindowResize() {
+
+					camara.aspect = window.innerWidth / window.innerHeight;
+					camara.updateProjectionMatrix();
+
+					rndr.setSize( window.innerWidth, window.innerHeight );
+
+				}
+			function MouseWheelHandler(e) {
+		    	var delta = event.deltaY;		    			
+
+				if(delta>0 && camradrot>=2){camradrot+=1;} 
+				if(camradrot<2){camradrot=2;}
+				if(delta<0 && camradrot<=50){camradrot-=1;} 
+				if(camradrot>50){camradrot=50;}			
+		}
+
+		</script>
+	</body>
+
+</html>

@@ -12,7 +12,10 @@
 	</head>
 
 	<body class="insc">
-
+	<audio id="audio" autoplay loop>
+	  <source src="../../sonido/inicio.mp3" type="audio/ogg">
+	  Your browser does not support the audio tag.
+	</audio>
 		<div class="information">
 			<h1 class="titulo"> Catarina <span class="arrow"></span></h1>
 			Tienen el cuerpo redondeado y con frecuencia colores vivos. Muchas especies se alimentan de pulgones, por lo que contribuyen a controlar estas plagas.<br><br>
@@ -25,11 +28,14 @@
 			</div>
 
 		</div>
-		
 		<script>
 			//------------------------------------------------------------------------DECLARACIONES
-			var camara, escena, rndr, modelo, raycaster;
+			var camara, escena, rndr, modelo, raycaster,movx=0;
 			var mouse = new THREE.Vector2(), INTERSECTED;
+			var camradrot = 10;
+
+			var audio = document.getElementById("audio");
+			audio.volume = 0.2;
 
 			init();
 			Draw();
@@ -38,7 +44,7 @@
 			function init(){
 				escena = new THREE.Scene();
 				camara = new THREE.PerspectiveCamera(70, window.innerWidth*0.66/window.innerHeight, 1, 10000);
-				camara.position.z= 10;
+				camara.position.z= 50;
 
 				raycaster = new THREE.Raycaster();
 
@@ -48,16 +54,13 @@
 				document.body.appendChild(rndr.domElement);
 				
 			//-----------------------------------------------------------------------Luces
-				var ambiental = new THREE.AmbientLight( 0xFFFFFF );
-				escena.add( ambiental );
-
-				var direccional1 = new THREE.DirectionalLight( 0xFFFFFF );
+				var direccional1 = new THREE.DirectionalLight( 0xFFFFFF , 3);
 					direccional1.position.set( 0, 0, 1 ).normalize();
 					escena.add( direccional1 );
-				var direccional2 = new THREE.DirectionalLight( 0xFFFFFF );
+				var direccional2 = new THREE.DirectionalLight( 0xFFFFFF , 3);
 						direccional2.position.set( 0.5, 0, -1 ).normalize();
 						escena.add( direccional2 );
-				var direccional3 = new THREE.DirectionalLight( 0xFFFFFF );
+				var direccional3 = new THREE.DirectionalLight( 0xFFFFFF , 3);
 						direccional3.position.set( -0.5, 0, -1 ).normalize();
 						escena.add( direccional3 );
 			//-----------------------------------------------------------------------OBJ
@@ -75,29 +78,25 @@
 						 modelo=object;
 
 						});	
-				camara.position=modelo.position;
 
 				document.addEventListener( 'mousemove', onDocumentMouseMove, false );//posición del mouse
+				document.addEventListener("mousewheel", MouseWheelHandler, false);
 				window.addEventListener( 'resize', onWindowResize, false );//tamaño del canvas			
 			} //----------------------------------------------------------------------------------------------------FIN INIT
 
 			function Update(){
+					
+					camara.position.x =  camradrot;
+					camara.position.z =  camradrot;					
 
-					modelo.rotation.y += 0.01;
-
-					//--------------------
-					//camara.position.y = mouse.y * 10;
-					//---------------
+					modelo.rotation.y +=0.01;
 
 					if (mouse.x<0.4)
 					{
-						camara.position.y = mouse.y * 100;
+						camara.position.y = mouse.y * 100;						
 					}
 
-
 					camara.lookAt( modelo.position);
-					camara.position.x = 10;
-					//rndr.render( escena, camara );
 					console.log(mouse.x);
 			}
 
@@ -112,7 +111,7 @@
 
 					event.preventDefault();
 
-					mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+					mouse.x = (( event.clientX / window.innerWidth ) * 2 - 1);
 					//console.log(mouse.x);
 					mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
 
@@ -125,6 +124,14 @@
 					rndr.setSize( window.innerWidth, window.innerHeight );
 
 				}
+			function MouseWheelHandler(e) {
+		    	var delta = event.deltaY;		    			
+
+				if(delta>0 && camradrot>=2){camradrot+=1;} 
+				if(camradrot<2){camradrot=2;}
+				if(delta<0 && camradrot<=50){camradrot-=1;} 
+				if(camradrot>50){camradrot=50;}			
+		}
 
 		</script>
 	</body>
