@@ -11,21 +11,17 @@
 
 	</head>
 
-	<body class="insc">
+	<body class="sbna">
 	<audio id="audio" autoplay loop>
 	  <source src="../../sonido/inicio.mp3" type="audio/ogg">
 	  Your browser does not support the audio tag.
 	</audio>
 		<div class="information">
-			<h1 class="titulo"> Mosca <span class="arrow"></span></h1>
-			Las moscas t&iacute;picas <em>(Muscidae y familias pr&oacute;ximas)</em>, como todos los d&iacute;pteros, poseen un cuerpo dividido en tres regiones o tagmas: cabeza, t&oacute;rax y abdomen. Poseen ojos compuestos por miles de facetas sensibles a la luz individualmente que limpian constantemente frotando sus patas, y piezas bucales adaptadas para succionar, lamer o perforar; ninguna mosca es capaz de morder o masticar, pero muchas especies pican y succionan sangre. Solo tienen dos alas; las alas posteriores están reducidas a unas estructuras llamadas halterios o balancines, que act&uacute;an como &oacute;rganos estabilizadores del desplazamiento.<br><br>
-
-			Tienen el cuerpo cubierto por numerosas sedas sensoriales con las que pueden saborear, oler y sentir. Las sedas de las piezas bucales y de las patas se usan para saborear; las moscas saborean lo que pisan; si pisan algo sabroso, bajan la boca y lo vuelven a probar.<br><br>
-
-			Las patas poseen unas almohadillas adherentes que les permiten caminar sobre superficies lisas como el vidrio, incluso boca abajo.
-
+			<h1 class="titulo"> Liebre <span class="arrow"></span></h1>
+			La <b>liebre roja de Smith</b> <em>(Pronolagus rupestris)</em> es una especie de mam&iacute;fero lagomorfo de la familia Leporidae que habita en la fosa tect&oacute;nica de Kenia, Zambia, este de Rodesia, Sud&aacute;frica y sudoeste de &Aacute;frica, siendo una población bastante estable.<br><br>
+			Mide de 40 a 57 cm. Las extremidades traseras miden de 7,5 a 10 cm y las orejas entre 6 y 10 cm. Su peso medio est&aacute; sobre los 2 kg. El pelaje del dorso es de un tono marr&oacute;n rojizo y es m&aacute;s fino que el pelaje interior. La cara y orejas son grises mientras que la cola y las patas son rojizas. Un rasgo que permite identificar esta especie son los puntos negros distribuidos por su pelo, algo más oscuras en la nuca. El vientre es algo sonrosado y blanquecino.
 			 <div class="selection">
-				<button id="b1" type="button" onclick="location.href= '../../03.html';">Regresar</button>
+				<button id="b1" type="button" onclick="location.href= '../../01.html';">Regresar</button>
 				<button id="b2" type="button" onclick="location.href= '../../index.html';"> Inicio</button>
 			</div>
 
@@ -70,16 +66,17 @@
 
 				THREE.Loader.Handlers.add( /\.dds$/i, new THREE.DDSLoader() );				
 				var loader = new THREE.OBJMTLLoader();
-				loader.load( '../../obj/insectos/mosca.obj', '../../obj/insectos/mosca.mtl', function ( object ) { 
+				loader.load( '../../obj/terrestres/liebre.obj', '../../obj/terrestres/liebre.mtl', function ( object ) { 
 
-						 object.position.y = 0;
-						 object.position.x = -20; 
-						 object.scale.set(1,1,1);
+						 object.position.y = -3;
+						 object.position.x = 0; 
+						 object.scale.set(0.5,0.5,0.5);
 
 						 escena.add( object );
 						 modelo=object;
 
 						});	
+				//camara.position.x= 10;
 
 				document.addEventListener( 'mousemove', onDocumentMouseMove, false );//posición del mouse
 				document.addEventListener("mousewheel", MouseWheelHandler, false);
@@ -95,7 +92,7 @@
 
 					if (mouse.x<0.4)
 					{
-						camara.position.y = mouse.y * 100;						
+						camara.position.y = (mouse.y* 100);						
 					}
 
 					camara.lookAt( modelo.position);
@@ -129,10 +126,10 @@
 			function MouseWheelHandler(e) {
 		    	var delta = event.deltaY;		    			
 
-				if(delta>0 && camradrot>=2){camradrot+=1;} 
-				if(camradrot<2){camradrot=2;}
+				if(delta>0 && camradrot>=10){camradrot+=1;} 
+				if(camradrot<10){camradrot=10;}
 				if(delta<0 && camradrot<=50){camradrot-=1;} 
-				if(camradrot>50){camradrot=50;}			
+				if(camradrot>30){camradrot=30;}			
 		}
 
 		</script>

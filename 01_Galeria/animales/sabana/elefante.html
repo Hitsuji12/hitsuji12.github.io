@@ -31,7 +31,7 @@
 			//------------------------------------------------------------------------DECLARACIONES
 			var camara, escena, rndr, modelo, raycaster,movx=0;
 			var mouse = new THREE.Vector2(), INTERSECTED;
-			var camradrot = 10;
+			var camradrot = 40;
 
 			var audio = document.getElementById("audio");
 			audio.volume = 0.2;
@@ -127,10 +127,10 @@
 			function MouseWheelHandler(e) {
 		    	var delta = event.deltaY;		    			
 
-				if(delta>0 && camradrot>=2){camradrot+=1;} 
-				if(camradrot<2){camradrot=2;}
+				if(delta>0 && camradrot>=10){camradrot+=1;} 
+				if(camradrot<10){camradrot=10;}
 				if(delta<0 && camradrot<=50){camradrot-=1;} 
-				if(camradrot>50){camradrot=50;}			
+				if(camradrot>70){camradrot=70;}			
 		}
 
 		</script>

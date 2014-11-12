@@ -1,7 +1,7 @@
 # 3ds Max Wavefront OBJ Exporter v0.97b - (c)2007 guruware
-# File Created: 08.11.2014 18:33:27
+# File Created: 10.11.2014 23:23:16
 
-newmtl _RabbitRabbit
+newmtl _liebre_RabbitRabbit
 	Ns 96.0784
 	Ni 1.5000
 	d 1.0000

@@ -18,8 +18,7 @@
 	</audio>
 		<div class="information">
 			<h1 class="titulo"> Avestruz <span class="arrow"></span></h1>
-			Los elefantes o elef&aacute;ntidos <em>(Elephantidae)</em> son una familia de mam&iacute;feros placentarios del orden Proboscidea. Antiguamente se clasificaban, junto con otros animales de piel gruesa, en el orden, ahora inv&aacute;lido, de los paquidermos <em>(Pachydermata)</em>. Existen hoy en d&iacute;a tres especies y diversas subespecies. Entre los g&eacute;neros extintos de esta familia destacan los mamuts. <br><br>
-			Los elefantes son los animales terrestres m&aacute;s grandes que existen actualmente. El periodo de gestaci&oacute;n es de 22 meses, el m&aacute;s largo en cualquier animal terrestre. El peso al nacer usualmente es 120 kg. Normalmente viven de 50 a 70 a&ntilde;os, pero registros antiguos documentan edades m&aacute;ximas de 82 años.2 El elefante m&aacute;s grande que se ha cazado, de los que se tiene registro, pesó alrededor de 11.000 kg <em>(Angola, 1956)</em>, alcanzando una altura en la cruz de 3,96 m, un metro m&aacute;s alto que el elefante africano promedio. El elefante m&aacute;s peque&ntilde;o, de alrededor del tama&ntilde;o de una cr&iacute;a o un cerdo grande, es una especie prehist&oacute;rica que existi&oacute; en la isla de Creta, Elephas creticus, durante el <b>Pleistoceno</b>.
+			El <b>avestruz</b> <em>(Struthio camelus)</em> es una especie de ave estrutioniforme de la familia <em>Struthionidae</wm>. Es un ave grande que no vuela, sino que es corredora. Se halla en &Aacute;frica, y en tiempos pasados tambi&eacute;n habit&oacute; en Oriente Medio. Es la m&aacute;s grande y la m&aacute;s pesada de las aves que a&uacute;n existen; puede alcanzar los 3 metros de altura y pesar unos 180 kg.
 
 			 <div class="selection">
 				<button id="b1" type="button" onclick="location.href= '../../01.html';">Regresar</button>
@@ -31,7 +30,7 @@
 			//------------------------------------------------------------------------DECLARACIONES
 			var camara, escena, rndr, modelo, raycaster,movx=0;
 			var mouse = new THREE.Vector2(), INTERSECTED;
-			var camradrot = 10;
+			var camradrot = 15;
 
 			var audio = document.getElementById("audio");
 			audio.volume = 0.2;
@@ -67,7 +66,7 @@
 
 				THREE.Loader.Handlers.add( /\.dds$/i, new THREE.DDSLoader() );				
 				var loader = new THREE.OBJMTLLoader();
-				loader.load( '../../obj/terrestres/avesturz.obj', '../../obj/terrestres/avesturz.mtl', function ( object ) { 
+				loader.load( '../../obj/terrestres/avestruz.obj', '../../obj/terrestres/avestruz.mtl', function ( object ) { 
 
 						 object.position.y = -3;
 						 object.position.x = 0; 
@@ -127,8 +126,8 @@
 			function MouseWheelHandler(e) {
 		    	var delta = event.deltaY;		    			
 
-				if(delta>0 && camradrot>=2){camradrot+=1;} 
-				if(camradrot<2){camradrot=2;}
+				if(delta>0 && camradrot>=10){camradrot+=1;} 
+				if(camradrot<10){camradrot=10;}
 				if(delta<0 && camradrot<=50){camradrot-=1;} 
 				if(camradrot>50){camradrot=50;}			
 		}

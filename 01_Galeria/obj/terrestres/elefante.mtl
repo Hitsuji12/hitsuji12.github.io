@@ -1,7 +1,7 @@
 # 3ds Max Wavefront OBJ Exporter v0.97b - (c)2007 guruware
-# File Created: 08.11.2014 18:41:31
+# File Created: 10.11.2014 23:16:02
 
-newmtl _elephantElphSkin
+newmtl _elefante_elephantElphSkin
 	Ns 96.0784
 	Ni 1.5000
 	d 1.0000
@@ -16,7 +16,7 @@ newmtl _elephantElphSkin
 	map_Kd maps\ElphSkin.jpg
 	map_bump -bm 0.0200 maps\ElphSkin.jpg
 
-newmtl _elephantEle_Tuskh
+newmtl _elefante_elephantEle_Tuskh
 	Ns 40.0000
 	Ni 1.5000
 	d 1.0000
@@ -31,7 +31,7 @@ newmtl _elephantEle_Tuskh
 	map_Kd maps\EleTusk.jpg
 	map_bump -bm 0.0200 maps\EleTusk.jpg
 
-newmtl _elephantElepEYE
+newmtl _elefante_elephantElepEYE
 	Ns 70.0000
 	Ni 1.5000
 	d 1.0000
