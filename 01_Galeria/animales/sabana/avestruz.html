@@ -20,15 +20,15 @@
 			<h1 class="titulo"> Avestruz <span class="arrow"></span></h1>
 			El <b>avestruz</b> <em>(Struthio camelus)</em> es una especie de ave estrutioniforme de la familia <em>Struthionidae</wm>. Es un ave grande que no vuela, sino que es corredora. Se halla en &Aacute;frica, y en tiempos pasados tambi&eacute;n habit&oacute; en Oriente Medio. Es la m&aacute;s grande y la m&aacute;s pesada de las aves que a&uacute;n existen; puede alcanzar los 3 metros de altura y pesar unos 180 kg.
 
-			 <div class="selection">
-				<button id="b1" type="button" onclick="location.href= '../../01.html';">Regresar</button>
-				<button id="b2" type="button" onclick="location.href= '../../index.html';"> Inicio</button>
+			<div class="selection">			
+				<a href= "../../01.html"><IMG class="inicio" SRC="../../textures/cubes/return.png"></a>				
 			</div>
+			</div>
+			<a href= "../../index.html"><IMG class="inicio" SRC="../../textures/cubes/leaf2.png"></a>
 
-		</div>
 		<script>
 			//------------------------------------------------------------------------DECLARACIONES
-			var camara, escena, rndr, modelo, raycaster,movx=0;
+			var camara, escena, rndr, modelo, raycaster,geometry, mesh, groundTexture, groundMaterial,movx=0;
 			var mouse = new THREE.Vector2(), INTERSECTED;
 			var camradrot = 15;
 
@@ -61,6 +61,25 @@
 				var direccional3 = new THREE.DirectionalLight( 0xFFFFFF , 3);
 						direccional3.position.set( -0.5, 0, -1 ).normalize();
 						escena.add( direccional3 );
+				var ambiental = new THREE.AmbientLight( 0xFFFFFF );
+				escena.add( ambiental );
+			//-----------------------------------------------------------------------piso
+				escena.fog = new THREE.Fog( 0xcce0ff, 50, 1000 );
+				
+				var groundTexture = THREE.ImageUtils.loadTexture( "../../textures/ground/tierra.jpg" );
+				groundTexture.wrapS = groundTexture.wrapT = THREE.RepeatWrapping;
+				groundTexture.repeat.set( 25, 25 );
+				groundTexture.anisotropy = 16;
+
+				var geometry = new THREE.PlaneGeometry(2000,2000,200,200);
+    			var material = new THREE.MeshPhongMaterial( { color: 0xffffff, specular: 0x001100, map: groundTexture } );
+    			plane = new THREE.Mesh( geometry, material );
+    			plane.position.y=-15;
+    			plane.rotation.x=  -1.57;
+    			plane.rotation.z=  0.9;
+				plane.rotation.x = - Math.PI / 2;
+				plane.receiveShadow = true;
+				escena.add( plane );
 			//-----------------------------------------------------------------------OBJ
 				modelo= new THREE.Object3D();
 

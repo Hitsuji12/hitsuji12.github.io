@@ -20,15 +20,15 @@
 			<h1 class="titulo"> Jirafa <span class="arrow"></span></h1>
 			La <b>jirafa</b> <em>(Giraffa camelopardalis)</em> es una especie de mamífero artiod&aacute;ctilo de la familia <b>Giraffidae</b> propio de &Aacute;frica. Es la m&aacute;s alta de todas las especies de animales terrestres existentes. Puede alcanzar una altura de 5,8 metros y un peso que var&iacute;a entre 750 y 1600 kg. <br><br>
 			Su &aacute;rea de distribución es disperso y se extiende de Chad en el norte hasta Sud&aacute;frica en el sur, y de Niger en el oeste hasta Somalia en el este. Por lo general habita en sabanas, pastizales, y bosques abiertos. Su principal fuente de alimento se compone de las hojas del acacia, que ramonea en alturas inaccesibles para la mayor&acute;a de los dem&aacute;s herb&iacute;voros. Las jirafas adultas son depredadas por leones, y los terneros tambi&eacute;n por leopardos, hienas manchadas y perros salvajes. Las jirafas adultas no tienen fuertes v&iacute;nculos sociales, aunque se agrupan en manadas abiertas y sueltas si llegan a estar moviéndose en la misma dirección general. Los machos establecen una jerarqu&iacute;a social mediante duelos conocidos como necking, un combate en el cual utilizan el cuello como arma. Solo los machos dominantes pueden acoplarse con las hembras; solo las hembras se dedican a la cr&iacute;a de los terneros.
-			 <div class="selection">
-				<button id="b1" type="button" onclick="location.href= '../../01.html';">Regresar</button>
-				<button id="b2" type="button" onclick="location.href= '../../index.html';"> Inicio</button>
+			<div class="selection">			
+				<a href= "../../01.html"><IMG class="inicio" SRC="../../textures/cubes/return.png"></a>				
 			</div>
+			</div>
+			<a href= "../../index.html"><IMG class="inicio" SRC="../../textures/cubes/leaf2.png"></a>
 
-		</div>
 		<script>
 			//------------------------------------------------------------------------DECLARACIONES
-			var camara, escena, rndr, modelo, raycaster,movx=0;
+			var camara, escena, rndr, modelo, raycaster,geometry, mesh, groundTexture, groundMaterial,movx=0;
 			var mouse = new THREE.Vector2(), INTERSECTED;
 			var camradrot = 45;
 
@@ -61,6 +61,25 @@
 				var direccional3 = new THREE.DirectionalLight( 0xFFFFFF , 3);
 						direccional3.position.set( -0.5, 0, -1 ).normalize();
 						escena.add( direccional3 );
+				var ambiental = new THREE.AmbientLight( 0xFFFFFF );
+				escena.add( ambiental );
+			//-----------------------------------------------------------------------piso
+				escena.fog = new THREE.Fog( 0xcce0ff, 50, 1000 );
+				
+				var groundTexture = THREE.ImageUtils.loadTexture( "../../textures/ground/tierra.jpg" );
+				groundTexture.wrapS = groundTexture.wrapT = THREE.RepeatWrapping;
+				groundTexture.repeat.set( 25, 25 );
+				groundTexture.anisotropy = 16;
+
+				var geometry = new THREE.PlaneGeometry(2000,2000,200,200);
+    			var material = new THREE.MeshPhongMaterial( { color: 0xffffff, specular: 0x001100, map: groundTexture } );
+    			plane = new THREE.Mesh( geometry, material );
+    			plane.position.y=-30;
+    			plane.rotation.x=  -1.57;
+    			plane.rotation.z=  0.9;
+				plane.rotation.x = - Math.PI / 2;
+				plane.receiveShadow = true;
+				escena.add( plane );
 			//-----------------------------------------------------------------------OBJ
 				modelo= new THREE.Object3D();
 

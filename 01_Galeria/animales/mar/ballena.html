@@ -23,16 +23,18 @@
 			Mide entre 24 y 27 m de longitud y pesa entre 100 y 120 t, aunque hay registros de ejemplares de m&aacute;s de 30 m de longitud y m&aacute;s de 190 t de peso, que lo convierten en el mayor animal de la Tierra, no solo en la actualidad sino tambi&eacute;n el mayor del que se tenga noticia en la Historia. <br><br>
 			 Largo y estilizado, el cuerpo de este mam&iacute;fero marino es de color gris azulado a lo largo del dorso y algo m&aacute;s claro en la zona ventral. Existen al menos tres subespecies distintas: B. m. musculus, del Atl&aacute;ntico Norte y Pac&iacute;fico Norte; B. m. intermedia, del oc&eacute;ano Ant&aacute;rtico y la B. m. brevicauda <em>(tambi&eacute;n conocida como ballena azul pigmea)</em>, que se encuentra en el <b>&Iacute;ndico</b> y en el <b>Pac&iacute;fico Sur</b>. Existen dudas sobre la atribuci&oacute;n como una cuarta subespecie de la B. m. indica, que tambi&eacute;n se encuentra en el oc&eacute;ano &Iacute;ndico. Como otras ballenas barbadas, su dieta consiste principalmente en peque&ntilde;os crust&aacute;ceos conocidos como <b>krill</b>.
 
-			 <div class="selection">
-				<button id="b1" type="button" onclick="location.href= '../../02.html';">Regresar</button>
-				<button id="b2" type="button" onclick="location.href= '../../index.html';">Inicio</button>
+			 <div class="selection">			
+				<a href= "../../02.html"><IMG class="inicio" SRC="../../textures/cubes/return.png"></a>				
 			</div>
+
+		</div>
+		<a href= "../../index.html"><IMG class="inicio" SRC="../../textures/cubes/leaf2.png"></a>
 
 		</div>
 		
 		<script>
 			//------------------------------------------------------------------------DECLARACIONES
-			var camara, escena, rndr, modelo, raycaster,movx=0;
+			var camara, escena, rndr, modelo, raycaster,geometry, mesh, groundTexture, groundMaterial,movx=0;
 			var mouse = new THREE.Vector2(), INTERSECTED;
 			var camradrot = 50;
 
@@ -65,6 +67,25 @@
 				var direccional3 = new THREE.DirectionalLight( 0xFFFFFF , 3);
 						direccional3.position.set( -0.5, 0, -1 ).normalize();
 						escena.add( direccional3 );
+				var ambiental = new THREE.AmbientLight( 0xFFFFFF );
+				escena.add( ambiental );
+			//-----------------------------------------------------------------------piso
+				escena.fog = new THREE.Fog( 0xcce0ff, 50, 1000 );
+				
+				var groundTexture = THREE.ImageUtils.loadTexture( "../../textures/ground/water.jpg" );
+				groundTexture.wrapS = groundTexture.wrapT = THREE.RepeatWrapping;
+				groundTexture.repeat.set( 25, 25 );
+				groundTexture.anisotropy = 16;
+
+				var geometry = new THREE.PlaneGeometry(2000,2000,200,200);
+    			var material = new THREE.MeshPhongMaterial( { color: 0xffffff, specular: 0x001100, map: groundTexture } );
+    			plane = new THREE.Mesh( geometry, material );
+    			plane.position.y=-10;
+    			plane.rotation.x=  -1.57;
+    			plane.rotation.z=  0.9;
+				plane.rotation.x = - Math.PI / 2;
+				plane.receiveShadow = true;
+				escena.add( plane );
 			//-----------------------------------------------------------------------OBJ
 				modelo= new THREE.Object3D();
 

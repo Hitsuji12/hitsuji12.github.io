@@ -22,15 +22,17 @@
 			Los <b>l&aacute;ridos</b> <em>(Laridae)</em> son una familia de aves del orden <b>Charadriiformes</b> conocidas vulgarmente como <b>gaviotas</b>. Est&aacute;n estrechamente relacionadas con los charranes de la familia <b>Sternidae</b>, y m&aacute;s lejanamente con las aves zancudas. La mayor&iacute;a de las gaviotas pertenece al g&eacute;nero <em>Larus</em>. <br><br>
 			Son en general aves grandes, en su mayor&iacute;a de plumaje gris, blanco o negro, a menudo con se&ntilde;ales negras en la cabeza o las alas. Tienen picos robustos, bastante largos. Las especies var&iacute;an en tama&ntilde;o desde la gaviota enana de 120 g y 29 cm, a el gavi&oacute;n atl&aacute;ntico de 1.75 kg y 76 cm.
 
-			 <div class="selection">
-				<button id="b1" type="button" onclick="location.href= '../../02.html';">Regresar</button>
-				<button id="b2" type="button" onclick="location.href= '../../index.html';"> Inicio</button>
+			 <div class="selection">			
+				<a href= "../../02.html"><IMG class="inicio" SRC="../../textures/cubes/return.png"></a>				
 			</div>
+
+		</div>
+		<a href= "../../index.html"><IMG class="inicio" SRC="../../textures/cubes/leaf2.png"></a>
 
 		</div>
 		<script>
 			//------------------------------------------------------------------------DECLARACIONES
-			var camara, escena, rndr, modelo, raycaster,movx=0;
+			var camara, escena, rndr, modelo, raycaster,geometry, mesh, groundTexture, groundMaterial,movx=0;
 			var mouse = new THREE.Vector2(), INTERSECTED;
 			var camradrot = 10;
 
@@ -54,7 +56,6 @@
 				document.body.appendChild(rndr.domElement);
 				
 			//-----------------------------------------------------------------------Luces
-
 				var direccional1 = new THREE.DirectionalLight( 0xFFFFFF , 3);
 					direccional1.position.set( 0, 0, 1 ).normalize();
 					escena.add( direccional1 );
@@ -64,6 +65,25 @@
 				var direccional3 = new THREE.DirectionalLight( 0xFFFFFF , 3);
 						direccional3.position.set( -0.5, 0, -1 ).normalize();
 						escena.add( direccional3 );
+				var ambiental = new THREE.AmbientLight( 0xFFFFFF );
+				escena.add( ambiental );
+			//-----------------------------------------------------------------------piso
+				escena.fog = new THREE.Fog( 0xcce0ff, 50, 1000 );
+				
+				var groundTexture = THREE.ImageUtils.loadTexture( "../../textures/ground/water.jpg" );
+				groundTexture.wrapS = groundTexture.wrapT = THREE.RepeatWrapping;
+				groundTexture.repeat.set( 25, 25 );
+				groundTexture.anisotropy = 16;
+
+				var geometry = new THREE.PlaneGeometry(2000,2000,200,200);
+    			var material = new THREE.MeshPhongMaterial( { color: 0xffffff, specular: 0x001100, map: groundTexture } );
+    			plane = new THREE.Mesh( geometry, material );
+    			plane.position.y=-10;
+    			plane.rotation.x=  -1.57;
+    			plane.rotation.z=  0.9;
+				plane.rotation.x = - Math.PI / 2;
+				plane.receiveShadow = true;
+				escena.add( plane );
 			//-----------------------------------------------------------------------OBJ
 				modelo= new THREE.Object3D();
 

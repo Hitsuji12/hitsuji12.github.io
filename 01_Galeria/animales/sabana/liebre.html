@@ -20,15 +20,15 @@
 			<h1 class="titulo"> Liebre <span class="arrow"></span></h1>
 			La <b>liebre roja de Smith</b> <em>(Pronolagus rupestris)</em> es una especie de mam&iacute;fero lagomorfo de la familia Leporidae que habita en la fosa tect&oacute;nica de Kenia, Zambia, este de Rodesia, Sud&aacute;frica y sudoeste de &Aacute;frica, siendo una población bastante estable.<br><br>
 			Mide de 40 a 57 cm. Las extremidades traseras miden de 7,5 a 10 cm y las orejas entre 6 y 10 cm. Su peso medio est&aacute; sobre los 2 kg. El pelaje del dorso es de un tono marr&oacute;n rojizo y es m&aacute;s fino que el pelaje interior. La cara y orejas son grises mientras que la cola y las patas son rojizas. Un rasgo que permite identificar esta especie son los puntos negros distribuidos por su pelo, algo más oscuras en la nuca. El vientre es algo sonrosado y blanquecino.
-			 <div class="selection">
-				<button id="b1" type="button" onclick="location.href= '../../01.html';">Regresar</button>
-				<button id="b2" type="button" onclick="location.href= '../../index.html';"> Inicio</button>
+			<div class="selection">			
+				<a href= "../../01.html"><IMG class="inicio" SRC="../../textures/cubes/return.png"></a>				
 			</div>
+			</div>
+			<a href= "../../index.html"><IMG class="inicio" SRC="../../textures/cubes/leaf2.png"></a>
 
-		</div>
 		<script>
 			//------------------------------------------------------------------------DECLARACIONES
-			var camara, escena, rndr, modelo, raycaster,movx=0;
+			var camara, escena, rndr, modelo, raycaster,geometry, mesh, groundTexture, groundMaterial,movx=0;
 			var mouse = new THREE.Vector2(), INTERSECTED;
 			var camradrot = 20;
 
@@ -61,6 +61,25 @@
 				var direccional3 = new THREE.DirectionalLight( 0xFFFFFF , 3);
 						direccional3.position.set( -0.5, 0, -1 ).normalize();
 						escena.add( direccional3 );
+				var ambiental = new THREE.AmbientLight( 0xFFFFFF );
+				escena.add( ambiental );
+			//-----------------------------------------------------------------------piso
+				escena.fog = new THREE.Fog( 0xcce0ff, 50, 1000 );
+				
+				var groundTexture = THREE.ImageUtils.loadTexture( "../../textures/ground/tierra.jpg" );
+				groundTexture.wrapS = groundTexture.wrapT = THREE.RepeatWrapping;
+				groundTexture.repeat.set( 25, 25 );
+				groundTexture.anisotropy = 16;
+
+				var geometry = new THREE.PlaneGeometry(2000,2000,200,200);
+    			var material = new THREE.MeshPhongMaterial( { color: 0xffffff, specular: 0x001100, map: groundTexture } );
+    			plane = new THREE.Mesh( geometry, material );
+    			plane.position.y=-12;
+    			plane.rotation.x=  -1.57;
+    			plane.rotation.z=  0.9;
+				plane.rotation.x = - Math.PI / 2;
+				plane.receiveShadow = true;
+				escena.add( plane );
 			//-----------------------------------------------------------------------OBJ
 				modelo= new THREE.Object3D();
 

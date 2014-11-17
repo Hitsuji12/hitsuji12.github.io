@@ -1,9 +1,11 @@
 <html>
 	<head>
 		<script src="../../js/three.js"></script>
+
 		<script src="../../js/DDSLoader.js"></script>
 		<script src="../../js/MTLLoader.js"></script>
 		<script src="../../js/OBJMTLLoader.js"></script>
+
 
 		<title> Multimedia Interactiva - GAVIOTA </title>
 		<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
@@ -22,15 +24,16 @@
 			Son insectos peque&ntilde;os, con un tama&ntilde;o reducido que va de 5 a 8 milimetros. De forma redondeada u oval, brillantes, suelen ser de vivos colores, con manchas negras sobre un fondo naranja, amarillo o rojo, en forma de puntos o rayas <em>(no es un caparaz&oacute;n sino gruesas alas transformadas, llamadas &eacute;litros, que protegen las alas funcionales para el vuelo, el segundo par)</em>. Algunas especies son peludas. Su cabeza, antenas y patas son negros. Las extremidades cortas. Dado que son &uacute;tiles, coloridos e inofensivos para los humanos, son insectos vistos tradicionalmente con simpat&iacute;a e incluso se les considera en algunos lugares signo de buena suerte, y que el matarlas se toma como un presagio de mala suerte.<br><br>
 			Los vivos colores de las Catarinas sirven para mantener alejados a los predadores, que suelen asociar los colores brillantes.
 
-			 <div class="selection">
-				<button id="b1" type="button" onclick="location.href= '../../03.html';">Regresar</button>
-				<button id="b2" type="button" onclick="location.href= '../../index.html';"> Inicio</button>
+			 <div class="selection">			
+				<a href= "../../03.html"><IMG class="inicio" SRC="../../textures/cubes/return.png"></a>				
 			</div>
 
 		</div>
+		<a href= "../../index.html"><IMG class="inicio" SRC="../../textures/cubes/leaf2.png"></a>
+		
 		<script>
 			//------------------------------------------------------------------------DECLARACIONES
-			var camara, escena, rndr, modelo, raycaster,movx=0;
+			var camara, escena, rndr, modelo, raycaster,geometry, mesh, groundTexture, groundMaterial,movx=0;
 			var mouse = new THREE.Vector2(), INTERSECTED;
 			var camradrot = 10;
 
@@ -63,6 +66,33 @@
 				var direccional3 = new THREE.DirectionalLight( 0xFFFFFF , 3);
 						direccional3.position.set( -0.5, 0, -1 ).normalize();
 						escena.add( direccional3 );
+				var ambiental = new THREE.AmbientLight( 0xFFFFFF );
+				escena.add( ambiental );
+			//-----------------------------------------------------------------------piso
+				escena.fog = new THREE.Fog( 0xcce0ff, 50, 1000 );
+				var groundTexture = THREE.ImageUtils.loadTexture( "../../textures/ground/pasto.png" );
+				groundTexture.wrapS = groundTexture.wrapT = THREE.RepeatWrapping;
+				groundTexture.repeat.set( 25, 25 );
+				groundTexture.anisotropy = 16;
+				
+				//var groundMaterial = new THREE.MeshPhongMaterial( { color: 0xffffff, specular: 0x111111, map: groundTexture } );
+				//var geometry =new THREE.PlaneBufferGeometry( 200, 200 );
+				
+				//var mesh = new THREE.Mesh( geometry, groundMaterial);
+
+				var geometry = new THREE.PlaneGeometry(2000,2000,200,200);
+    			//var texture = THREE.ImageUtils.loadTexture( "../../textures/ground/pasto.png" );
+    			var material = new THREE.MeshPhongMaterial( { color: 0xffffff, specular: 0x001100, map: groundTexture } );
+    			plane = new THREE.Mesh( geometry, material );
+    			plane.position.y=-10;
+    			plane.rotation.x=  -1.57;
+    			plane.rotation.z=  0.9;
+
+				//mesh.position.y = 0;
+				plane.rotation.x = - Math.PI / 2;
+				plane.receiveShadow = true;
+				escena.add( plane );
+
 			//-----------------------------------------------------------------------OBJ
 				modelo= new THREE.Object3D();
 
@@ -79,6 +109,7 @@
 
 						});	
 
+				camara.position.y= 20;
 				document.addEventListener( 'mousemove', onDocumentMouseMove, false );//posición del mouse
 				document.addEventListener("mousewheel", MouseWheelHandler, false);
 				window.addEventListener( 'resize', onWindowResize, false );//tamaño del canvas			

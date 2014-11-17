@@ -21,15 +21,15 @@
 			Los elefantes o elef&aacute;ntidos <em>(Elephantidae)</em> son una familia de mam&iacute;feros placentarios del orden Proboscidea. Antiguamente se clasificaban, junto con otros animales de piel gruesa, en el orden, ahora inv&aacute;lido, de los paquidermos <em>(Pachydermata)</em>. Existen hoy en d&iacute;a tres especies y diversas subespecies. Entre los g&eacute;neros extintos de esta familia destacan los mamuts. <br><br>
 			Los elefantes son los animales terrestres m&aacute;s grandes que existen actualmente. El periodo de gestaci&oacute;n es de 22 meses, el m&aacute;s largo en cualquier animal terrestre. El peso al nacer usualmente es 120 kg. Normalmente viven de 50 a 70 a&ntilde;os, pero registros antiguos documentan edades m&aacute;ximas de 82 años.2 El elefante m&aacute;s grande que se ha cazado, de los que se tiene registro, pesó alrededor de 11.000 kg <em>(Angola, 1956)</em>, alcanzando una altura en la cruz de 3,96 m, un metro m&aacute;s alto que el elefante africano promedio. El elefante m&aacute;s peque&ntilde;o, de alrededor del tama&ntilde;o de una cr&iacute;a o un cerdo grande, es una especie prehist&oacute;rica que existi&oacute; en la isla de Creta, Elephas creticus, durante el <b>Pleistoceno</b>.
 
-			 <div class="selection">
-				<button id="b1" type="button" onclick="location.href= '../../01.html';">Regresar</button>
-				<button id="b2" type="button" onclick="location.href= '../../index.html';"> Inicio</button>
+			<div class="selection">			
+				<a href= "../../01.html"><IMG class="inicio" SRC="../../textures/cubes/return.png"></a>				
 			</div>
+			</div>
+			<a href= "../../index.html"><IMG class="inicio" SRC="../../textures/cubes/leaf2.png"></a>
 
-		</div>
 		<script>
 			//------------------------------------------------------------------------DECLARACIONES
-			var camara, escena, rndr, modelo, raycaster,movx=0;
+			var camara, escena, rndr, modelo, raycaster,geometry, mesh, groundTexture, groundMaterial,movx=0;
 			var mouse = new THREE.Vector2(), INTERSECTED;
 			var camradrot = 40;
 
@@ -62,6 +62,25 @@
 				var direccional3 = new THREE.DirectionalLight( 0xFFFFFF , 3);
 						direccional3.position.set( -0.5, 0, -1 ).normalize();
 						escena.add( direccional3 );
+				var ambiental = new THREE.AmbientLight( 0xFFFFFF );
+				escena.add( ambiental );
+			//-----------------------------------------------------------------------piso
+				escena.fog = new THREE.Fog( 0xcce0ff, 50, 1000 );
+				
+				var groundTexture = THREE.ImageUtils.loadTexture( "../../textures/ground/tierra.jpg" );
+				groundTexture.wrapS = groundTexture.wrapT = THREE.RepeatWrapping;
+				groundTexture.repeat.set( 25, 25 );
+				groundTexture.anisotropy = 16;
+
+				var geometry = new THREE.PlaneGeometry(2000,2000,200,200);
+    			var material = new THREE.MeshPhongMaterial( { color: 0xffffff, specular: 0x001100, map: groundTexture } );
+    			plane = new THREE.Mesh( geometry, material );
+    			plane.position.y=-25;
+    			plane.rotation.x=  -1.57;
+    			plane.rotation.z=  0.9;
+				plane.rotation.x = - Math.PI / 2;
+				plane.receiveShadow = true;
+				escena.add( plane );
 			//-----------------------------------------------------------------------OBJ
 				modelo= new THREE.Object3D();
 
